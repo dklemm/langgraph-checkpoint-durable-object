@@ -17,7 +17,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 24
+          node-version-file: .nvmrc
       - run: npm ci
       - run: npm run format:check
       - run: npm run typecheck
@@ -36,7 +36,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 24
+          node-version-file: .nvmrc
       - run: npm ci
       - run: npm install --no-save @langchain/core@1.1.48 @langchain/langgraph-checkpoint@1.2.0 @langchain/langgraph@1.5.1
       - run: npm run typecheck

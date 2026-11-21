@@ -23,11 +23,9 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 24
+          node-version-file: .nvmrc # its bundled npm must be 11.15+ for npm stage publish
           registry-url: https://registry.npmjs.org
           package-manager-cache: false # a poisoned cache must not reach a release
-      # npm stage publish needs npm 11.15 or later.
-      - run: npm install -g npm@11.21.3
       - name: Check the tag matches package.json
         run: test "v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
       - run: npm ci
