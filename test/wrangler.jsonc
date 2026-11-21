@@ -1,0 +1,11 @@
+// Test-only Worker: gives each test a real SQLite-backed Durable Object.
+{
+  "name": "checkpoint-test",
+  "main": "./worker.ts",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "durable_objects": {
+    "bindings": [{ "name": "TEST_OBJECT", "class_name": "TestObject" }],
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["TestObject"] }],
+}

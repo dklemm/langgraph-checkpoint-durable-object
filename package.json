@@ -1,0 +1,77 @@
+{
+  "name": "@dklemm/langgraph-checkpoint-durable-object",
+  "version": "0.1.0",
+  "description": "LangGraph.js checkpoint saver for Cloudflare Durable Objects, backed by the object's built-in SQLite storage.",
+  "license": "MIT",
+  "author": "Daniel Klemm",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dklemm/langgraph-checkpoint-durable-object.git"
+  },
+  "homepage": "https://github.com/dklemm/langgraph-checkpoint-durable-object#readme",
+  "bugs": {
+    "url": "https://github.com/dklemm/langgraph-checkpoint-durable-object/issues"
+  },
+  "type": "module",
+  "keywords": [
+    "langgraph",
+    "langchain",
+    "checkpoint",
+    "checkpointer",
+    "cloudflare",
+    "durable-objects",
+    "workers",
+    "sqlite"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepublishOnly": "npm run typecheck && npm test",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "@langchain/core": "^1.1.48",
+    "@langchain/langgraph-checkpoint": "^1.2.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.9.0",
+    "@cloudflare/workers-types": "^5.20261121.1",
+    "@langchain/core": "^1.5.0",
+    "@langchain/langgraph": "^1.7.5",
+    "@langchain/langgraph-checkpoint": "^1.2.3",
+    "@langchain/langgraph-checkpoint-validation": "^1.2.1",
+    "@types/node": "^22.20.5",
+    "prettier": "^3.10.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.8",
+    "vitest": "~4.1.12",
+    "wrangler": "^4.166.0",
+    "zod": "^4.6.7"
+  },
+  "overrides": {
+    "vitest": "~4.1.12",
+    "@vitest/browser-playwright": "~4.1.12"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
