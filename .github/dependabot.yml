@@ -1,0 +1,26 @@
+version: 2
+updates:
+  # Everything in package.json is a dev dependency, so none of these updates
+  # change what ships to npm. Minor and patch bumps come as one PR; each major
+  # bump gets its own, since those are the ones likely to need code changes.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    # Skip releases younger than a week. Most malicious npm releases are found
+    # and pulled within days.
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ['*']
