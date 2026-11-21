@@ -62,14 +62,13 @@
     "@types/node": "^22.20.5",
     "prettier": "^3.10.1",
     "typescript": "^5.9.3",
-    "vite": "^7.3.8",
-    "vitest": "~4.1.12",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1",
     "wrangler": "^4.166.0",
     "zod": "^4.6.7"
   },
   "overrides": {
-    "vitest": "~4.1.12",
-    "@vitest/browser-playwright": "~4.1.12"
+    "vitest": "^5.1.1"
   },
   "publishConfig": {
     "access": "public"

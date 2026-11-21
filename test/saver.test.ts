@@ -1,6 +1,6 @@
 import {
   ERROR,
-  JsonPlusSerializer,
+  MemorySaver,
   emptyCheckpoint,
   uuid6,
   type Checkpoint,
@@ -12,6 +12,10 @@ import { evictDurableObject } from 'cloudflare:test';
 import { describe, expect, it } from 'vitest';
 import { DurableObjectSaver } from '../src/index';
 import { collect, inObject, inStorage, newObject } from './helpers';
+
+// LangChain's default serializer. JsonPlusSerializer itself is only exported
+// from @langchain/langgraph-checkpoint 1.2.2, and this package supports 1.2.0.
+const defaultSerde = new MemorySaver().serde;
 
 const loopMetadata: CheckpointMetadata = { source: 'loop', step: 0, parents: {} };
 
@@ -69,11 +73,10 @@ describe('upgrading from the schema without task_path', () => {
           task_id TEXT NOT NULL, idx INTEGER NOT NULL, channel TEXT NOT NULL, type TEXT NOT NULL, value BLOB NOT NULL,
           PRIMARY KEY (thread_id, checkpoint_ns, checkpoint_id, task_id, idx))`);
 
-      const serde = new JsonPlusSerializer();
       const checkpoint = checkpointWithId(1, { messages: ['legacy'] });
-      const [type, checkpointBytes] = await serde.dumpsTyped(checkpoint);
-      const [, metadataBytes] = await serde.dumpsTyped(loopMetadata);
-      const [, writeBytes] = await serde.dumpsTyped('legacy write');
+      const [type, checkpointBytes] = await defaultSerde.dumpsTyped(checkpoint);
+      const [, metadataBytes] = await defaultSerde.dumpsTyped(loopMetadata);
+      const [, writeBytes] = await defaultSerde.dumpsTyped('legacy write');
       storage.sql.exec(
         'INSERT INTO lc_checkpoints VALUES (?, ?, ?, ?, ?, ?, ?)',
         't',
@@ -178,13 +181,12 @@ describe('putWrites', () => {
   });
 
   it('writes nothing when serialization fails', async () => {
-    const json = new JsonPlusSerializer();
     const failOnMarker: SerializerProtocol = {
       dumpsTyped: async (data: unknown): Promise<[string, Uint8Array]> => {
         if (data === 'unserializable') throw new Error('boom');
-        return json.dumpsTyped(data);
+        return defaultSerde.dumpsTyped(data);
       },
-      loadsTyped: (type: string, data: Uint8Array | string): Promise<unknown> => json.loadsTyped(type, data),
+      loadsTyped: (type: string, data: Uint8Array | string): Promise<unknown> => defaultSerde.loadsTyped(type, data),
     };
     await inStorage(newObject(), async (storage) => {
       const saver = new DurableObjectSaver(storage, failOnMarker);
