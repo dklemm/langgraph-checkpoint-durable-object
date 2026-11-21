@@ -1,6 +1,6 @@
 {
   "name": "@dklemm/langgraph-checkpoint-durable-object",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "LangGraph.js checkpoint saver for Cloudflare Durable Objects, backed by the object's built-in SQLite storage.",
   "license": "MIT",
   "author": "Daniel Klemm",
